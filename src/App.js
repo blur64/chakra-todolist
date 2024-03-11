@@ -12,6 +12,16 @@ function App() {
   const [nextId, setNextId] = useState(0);
   const [visibleTasksType, setVisibleTasksType] = useState("all");
 
+  const visibleTasks = tasks.filter(t => {
+    if (visibleTasksType === "active") {
+      return !t.isCompleted;
+    }
+    if (visibleTasksType === "completed") {
+      return t.isCompleted;
+    }
+    return t;
+  });
+
   function changeVisibleTasksType(type) {
     setVisibleTasksType(type);
   }
@@ -46,7 +56,7 @@ function App() {
         onRemoveOne={removeOneTask}
         onToggleOneCompleteness={toggleOneTaskCompleteness}
         onEditTextOne={editOneTaskText}
-        tasks={tasks}
+        tasks={visibleTasks}
       />
     </Box>
   );
