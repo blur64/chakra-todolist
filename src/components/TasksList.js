@@ -27,19 +27,27 @@ function Task({ text, isCompleted, onRemove, toggleCompleteness, onTextEdit }) {
   const [newText, setnNewText] = useState(text);
 
   function handleKeyUpWhenEditing({ key }) {
-    if (key === "Enter") {
+    if (key === "Enter" && newText) {
       onTextEdit(newText);
       setIsEditing(false);
     }
   }
 
+  function handleEditingInputChange({ target: { value } }) {
+    setnNewText(value);
+  }
+
+  function handleTextEdit() {
+    setIsEditing(true);
+  }
+
   return <ListItem>
     {isEditing ?
-      <Input onChange={(e) => setnNewText(e.target.value)} onKeyUp={handleKeyUpWhenEditing} type="text" /> :
+      <Input onChange={handleEditingInputChange} onKeyUp={handleKeyUpWhenEditing} type="text" /> :
       <Checkbox onChange={toggleCompleteness} isChecked={isCompleted} style={isCompleted ? { color: 'grey' } : {}}>
         {text}
       </Checkbox>}
-    <Button onClick={() => setIsEditing(true)}>edit</Button>
+    <Button onClick={handleTextEdit}>edit</Button>
     <Button onClick={onRemove}>x</Button>
   </ListItem>;
 }

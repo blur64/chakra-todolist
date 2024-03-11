@@ -12,15 +12,21 @@ export default function AddTaskControl({ onTaskDataCreate }) {
     setNewTaskText("");
   }
 
-  function handleKeyUp(key) {
-    if (key === "Enter") {
+  // There is similar logic in Task component in TaskList.js, maybe put it in
+  // separate component? 
+  function handleKeyUp({ key }) {
+    if (key === "Enter" && newTaskText) {
       createTaskData();
     }
   }
 
+  function handleInputChange({ target: { value } }) {
+    setNewTaskText(value);
+  }
+
   return <Input
-    onChange={e => setNewTaskText(e.target.value)}
-    onKeyUp={e => handleKeyUp(e.key)}
+    onChange={handleInputChange}
+    onKeyUp={handleKeyUp}
     value={newTaskText}
     type="text"
   />;
