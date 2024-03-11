@@ -1,7 +1,8 @@
 // react
 import { useState, useEffect } from "react";
 // chakra
-import { Box } from "@chakra-ui/react";
+import { Box, Menu, MenuButton, MenuList, MenuItem, Button } from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 // components
 import AddTaskControl from "./components/AddTaskControl";
 import TasksList from "./components/TasksList";
@@ -79,10 +80,31 @@ function App() {
       { ...t, text: newText } : t));
   }
 
+  // Maybe create a single function that accepts tasks type to remove? 
+  function cleanAllTasks() {
+    setTasks([]);
+  }
+  function cleanAllActiveTasks() {
+    setTasks(tasks.filter(t => t.isCompleted));
+  }
+  function cleanAllCompletedTasks() {
+    setTasks(tasks.filter(t => !t.isCompleted));
+  }
+
   return (
     <Box w="sm" mx="auto" mt={4}>
       <AddTaskControl onTaskDataCreate={createTask} />
       <p>Completeness: {completenessPercentage}%</p>
+      <Menu>
+        <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+          Remove
+        </MenuButton>
+        <MenuList>
+          <MenuItem onClick={cleanAllTasks}>All</MenuItem>
+          <MenuItem onClick={cleanAllActiveTasks}>Active</MenuItem>
+          <MenuItem onClick={cleanAllCompletedTasks}>Completed</MenuItem>
+        </MenuList>
+      </Menu>
       <ChangeVisibleTasksTypeControl
         currentType={visibleTasksType}
         onChange={changeVisibleTasksType}
