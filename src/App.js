@@ -16,10 +16,14 @@ function App() {
     setNextId(nextId + 1);
   }
 
+  function removeOneTask(id) {
+    setTasks(tasks.filter(t => t.id !== id));
+  }
+
   return (
     <Box w="sm" mx="auto" mt={4}>
       <AddTaskControl onTaskDataCreate={createTask} />
-      <TasksList tasks={tasks} />
+      <TasksList tasks={tasks} onRemoveOne={removeOneTask} />
     </Box>
   );
 }

@@ -1,4 +1,4 @@
-import { UnorderedList, ListItem } from "@chakra-ui/react";
+import { UnorderedList, ListItem, Button } from "@chakra-ui/react";
 
 /*
 {
@@ -7,12 +7,19 @@ import { UnorderedList, ListItem } from "@chakra-ui/react";
 }
 */
 
-export default function TasksList({ tasks }) {
+export default function TasksList({ tasks, onRemoveOne }) {
   return <UnorderedList>
-    {tasks.map(t => <Task id={t.id} text={t.text} key={t.id} />)}
+    {tasks.map(t => <Task
+      onRemove={() => onRemoveOne(t.id)}
+      text={t.text}
+      key={t.id}
+    />)}
   </UnorderedList>
 }
 
-function Task({ id, text }) {
-  return <ListItem>{text}</ListItem>;
+function Task({ text, onRemove }) {
+  return <ListItem>
+    {text}
+    <Button onClick={onRemove}>x</Button>
+  </ListItem>;
 }
