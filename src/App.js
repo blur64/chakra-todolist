@@ -12,7 +12,7 @@ function App() {
   const [nextId, setNextId] = useState(0);
 
   function createTask(text) {
-    setTasks([{ id: nextId, text }, ...tasks]);
+    setTasks([{ id: nextId, text, isCompleted: false }, ...tasks]);
     setNextId(nextId + 1);
   }
 
@@ -20,10 +20,19 @@ function App() {
     setTasks(tasks.filter(t => t.id !== id));
   }
 
+  function toggleOneTaskCompleteness(id) {
+    setTasks(tasks.map(t => t.id === id ?
+      { ...t, isCompleted: !t.isCompleted } : t));
+  }
+
   return (
     <Box w="sm" mx="auto" mt={4}>
       <AddTaskControl onTaskDataCreate={createTask} />
-      <TasksList tasks={tasks} onRemoveOne={removeOneTask} />
+      <TasksList
+        onRemoveOne={removeOneTask}
+        onToggleOneCompleteness={toggleOneTaskCompleteness}
+        tasks={tasks}
+      />
     </Box>
   );
 }
