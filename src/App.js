@@ -5,10 +5,16 @@ import { Box } from "@chakra-ui/react";
 // components
 import AddTaskControl from "./components/AddTaskControl";
 import TasksList from "./components/TasksList";
+import ChangeVisibleTasksTypeControl from "./components/ChangeVisibleTasksTypeControl";
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const [nextId, setNextId] = useState(0);
+  const [visibleTasksType, setVisibleTasksType] = useState("all");
+
+  function changeVisibleTasksType(type) {
+    setVisibleTasksType(type);
+  }
 
   function createTask(text) {
     setTasks([{ id: nextId, text, isCompleted: false }, ...tasks]);
@@ -32,6 +38,10 @@ function App() {
   return (
     <Box w="sm" mx="auto" mt={4}>
       <AddTaskControl onTaskDataCreate={createTask} />
+      <ChangeVisibleTasksTypeControl
+        currentType={visibleTasksType}
+        onChange={changeVisibleTasksType}
+      />
       <TasksList
         onRemoveOne={removeOneTask}
         onToggleOneCompleteness={toggleOneTaskCompleteness}
