@@ -11,6 +11,23 @@ function findMaxId(items) {
   return Math.max(0, ...items.map(i => i.id));
 }
 
+function validateTaskText(text) {
+  const textType = typeof text;
+  if (textType !== "string") {
+    throw new TypeError(`Unexpected type of task text: ${textType}`);
+  } else if (!text.length) {
+    throw new Error(`Empty task text is not allowed`);
+  }
+}
+function validateTaskId(id) {
+  const idType = typeof id;
+  if (idType !== "number") {
+    throw new TypeError(`Unexpected type of task id: ${idType}`);
+  } else if (id <= 0) {
+    throw new Error(`Task id must be more than 0`);
+  }
+}
+
 function App() {
   const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem("chakra-todolist-tasks")) || []);
   const [nextId, setNextId] = useState(findMaxId(tasks) + 1);
@@ -39,20 +56,25 @@ function App() {
   }
 
   function createTask(text) {
+    validateTaskText(text);
     setTasks([{ id: nextId, text, isCompleted: false }, ...tasks]);
     setNextId(nextId + 1);
   }
 
   function removeOneTask(id) {
+    validateTaskId(id);
     setTasks(tasks.filter(t => t.id !== id));
   }
 
   function toggleOneTaskCompleteness(id) {
+    validateTaskId(id);
     setTasks(tasks.map(t => t.id === id ?
       { ...t, isCompleted: !t.isCompleted } : t));
   }
 
   function editOneTaskText(id, newText) {
+    validateTaskText(newText);
+    validateTaskId(id);
     setTasks(tasks.map(t => t.id === id ?
       { ...t, text: newText } : t));
   }
