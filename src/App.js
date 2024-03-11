@@ -26,6 +26,11 @@ function App() {
     return t;
   });
 
+  const tasksCount = tasks.length;
+  const completenessPercentage = tasksCount ?
+    Math.round(tasks.filter(t => t.isCompleted).length / tasksCount * 100) :
+    0;
+
   useEffect(() => localStorage
     .setItem("chakra-todolist-tasks", JSON.stringify(tasks)), [tasks]);
 
@@ -55,6 +60,7 @@ function App() {
   return (
     <Box w="sm" mx="auto" mt={4}>
       <AddTaskControl onTaskDataCreate={createTask} />
+      <p>Completeness: {completenessPercentage}%</p>
       <ChangeVisibleTasksTypeControl
         currentType={visibleTasksType}
         onChange={changeVisibleTasksType}
