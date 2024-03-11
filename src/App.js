@@ -1,5 +1,5 @@
 // react
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // chakra
 import { Box } from "@chakra-ui/react";
 // components
@@ -7,9 +7,13 @@ import AddTaskControl from "./components/AddTaskControl";
 import TasksList from "./components/TasksList";
 import ChangeVisibleTasksTypeControl from "./components/ChangeVisibleTasksTypeControl";
 
+function findMaxId(items) {
+  return Math.max(0, ...items.map(i => i.id));
+}
+
 function App() {
-  const [tasks, setTasks] = useState([]);
-  const [nextId, setNextId] = useState(0);
+  const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem("chakra-todolist-tasks")) || []);
+  const [nextId, setNextId] = useState(findMaxId(tasks) + 1);
   const [visibleTasksType, setVisibleTasksType] = useState("all");
 
   const visibleTasks = tasks.filter(t => {
@@ -21,6 +25,9 @@ function App() {
     }
     return t;
   });
+
+  useEffect(() => localStorage
+    .setItem("chakra-todolist-tasks", JSON.stringify(tasks)), [tasks]);
 
   function changeVisibleTasksType(type) {
     setVisibleTasksType(type);
