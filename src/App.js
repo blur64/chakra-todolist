@@ -25,12 +25,18 @@ function App() {
       { ...t, isCompleted: !t.isCompleted } : t));
   }
 
+  function editOneTaskText(id, newText) {
+    setTasks(tasks.map(t => t.id === id ?
+      { ...t, text: newText } : t));
+  }
+
   return (
     <Box w="sm" mx="auto" mt={4}>
       <AddTaskControl onTaskDataCreate={createTask} />
       <TasksList
         onRemoveOne={removeOneTask}
         onToggleOneCompleteness={toggleOneTaskCompleteness}
+        onEditTextOne={editOneTaskText}
         tasks={tasks}
       />
     </Box>
