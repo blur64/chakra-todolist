@@ -1,8 +1,7 @@
+// react
 import { useState } from "react";
-
 // chakra
 import { Box } from "@chakra-ui/react";
-
 // components
 import AddTaskControl from "./components/AddTaskControl";
 import TasksList from "./components/TasksList";

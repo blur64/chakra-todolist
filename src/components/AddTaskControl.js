@@ -1,5 +1,7 @@
-import { Input } from "@chakra-ui/react";
+// react
 import { useState } from "react";
+// chakra
+import { Input } from "@chakra-ui/react";
 
 export default function AddTaskControl({ onTaskDataCreate }) {
   const [newTaskText, setNewTaskText] = useState("");
