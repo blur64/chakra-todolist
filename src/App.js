@@ -7,8 +7,9 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import AddTaskControl from "./components/AddTaskControl";
 import TasksList from "./components/TasksList";
 import ChangeTasksFilterControl from "./components/ChangeTasksFilterControl";
-
+// other
 import tasksReducer, { actionTypes } from "./tasksReducer";
+import { saveTasks, getTasks } from "./api";
 
 export const tasksFilters = {
   ALL: 0,
@@ -17,9 +18,10 @@ export const tasksFilters = {
 };
 
 function App() {
-  const [tasks, dispatch] = useReducer(tasksReducer, JSON.parse(localStorage
-    .getItem("chakra-todolist-tasks")) || []);
+  const [tasks, dispatch] = useReducer(tasksReducer, getTasks());
   const [currentTasksFilter, setCurrentTasksFilter] = useState(tasksFilters.ALL);
+
+  useEffect(() => saveTasks(tasks), [tasks]);
 
   const visibleTasks = tasks.filter(t => {
     if (currentTasksFilter === tasksFilters.ACTIVE) {
@@ -34,9 +36,6 @@ function App() {
   const completenessPercentage = useMemo(() => tasks.length ?
     Math.round(tasks.filter(t => t.isCompleted).length / tasks.length * 100) :
     0, [tasks]);
-
-  useEffect(() => localStorage
-    .setItem("chakra-todolist-tasks", JSON.stringify(tasks)), [tasks]);
 
   const changeCurrentTasksFilter = useCallback((newFilter) =>
     setCurrentTasksFilter(newFilter), []);
