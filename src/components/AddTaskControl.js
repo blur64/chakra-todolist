@@ -1,9 +1,9 @@
 // react
-import { useCallback, useState } from "react";
+import { useCallback, useState, memo } from "react";
 // chakra
 import { Input } from "@chakra-ui/react";
 
-export default function AddTaskControl({ onTaskDataCreate }) {
+export default memo(function AddTaskControl({ onTaskDataCreate }) {
   const [newTaskText, setNewTaskText] = useState("");
 
   function createTaskData() {
@@ -31,4 +31,4 @@ export default function AddTaskControl({ onTaskDataCreate }) {
     value={newTaskText}
     type="text"
   />;
-}
+});

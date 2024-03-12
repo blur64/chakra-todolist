@@ -1,9 +1,11 @@
+// react
+import { memo } from "react";
 // chakra
 import { Tabs, Tab, TabList } from "@chakra-ui/react";
 
 import { tasksFilters } from "../App";
 
-export default function ChangeTasksFilterControl({ currentFilter, onChange }) {
+export default memo(function ChangeTasksFilterControl({ currentFilter, onChange }) {
   return (
     <div>
       <Tabs defaultIndex={currentFilter}>
@@ -15,4 +17,4 @@ export default function ChangeTasksFilterControl({ currentFilter, onChange }) {
       </Tabs>
     </div>
   );
-}
+});
