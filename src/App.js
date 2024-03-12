@@ -1,5 +1,5 @@
 // react
-import { useEffect, useReducer, useState, useCallback } from "react";
+import { useEffect, useReducer, useState, useCallback, useMemo } from "react";
 // chakra
 import { Box, Menu, MenuButton, MenuList, MenuItem, Button } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
@@ -31,10 +31,9 @@ function App() {
     return t;
   });
 
-  const tasksCount = tasks.length;
-  const completenessPercentage = tasksCount ?
-    Math.round(tasks.filter(t => t.isCompleted).length / tasksCount * 100) :
-    0;
+  const completenessPercentage = useMemo(() => tasks.length ?
+    Math.round(tasks.filter(t => t.isCompleted).length / tasks.length * 100) :
+    0, [tasks]);
 
   useEffect(() => localStorage
     .setItem("chakra-todolist-tasks", JSON.stringify(tasks)), [tasks]);
