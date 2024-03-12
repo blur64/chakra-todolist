@@ -6,7 +6,7 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 // components
 import AddTaskControl from "./components/AddTaskControl";
 import TasksList from "./components/TasksList";
-import ChangeVisibleTasksTypeControl from "./components/ChangeVisibleTasksTypeControl";
+import ChangeTasksFilterControl from "./components/ChangeTasksFilterControl";
 
 function findMaxId(items) {
   return Math.max(0, ...items.map(i => i.id));
@@ -29,16 +29,22 @@ function validateTaskId(id) {
   }
 }
 
+export const tasksFilters = {
+  ALL: 0,
+  ACTIVE: 1,
+  COMPLETED: 2,
+};
+
 function App() {
   const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem("chakra-todolist-tasks")) || []);
   const [nextId, setNextId] = useState(findMaxId(tasks) + 1);
-  const [visibleTasksType, setVisibleTasksType] = useState("all");
+  const [currentTasksFilter, setCurrentTasksFilter] = useState(tasksFilters.ALL);
 
   const visibleTasks = tasks.filter(t => {
-    if (visibleTasksType === "active") {
+    if (currentTasksFilter === tasksFilters.ACTIVE) {
       return !t.isCompleted;
     }
-    if (visibleTasksType === "completed") {
+    if (currentTasksFilter === tasksFilters.COMPLETED) {
       return t.isCompleted;
     }
     return t;
@@ -52,8 +58,8 @@ function App() {
   useEffect(() => localStorage
     .setItem("chakra-todolist-tasks", JSON.stringify(tasks)), [tasks]);
 
-  function changeVisibleTasksType(type) {
-    setVisibleTasksType(type);
+  function changeCurrentTasksFilter(filter) {
+    setCurrentTasksFilter(filter);
   }
 
   function createTask(text) {
@@ -105,9 +111,9 @@ function App() {
           <MenuItem onClick={cleanAllCompletedTasks}>Completed</MenuItem>
         </MenuList>
       </Menu>
-      <ChangeVisibleTasksTypeControl
-        currentType={visibleTasksType}
-        onChange={changeVisibleTasksType}
+      <ChangeTasksFilterControl
+        currentFilter={currentTasksFilter}
+        onChange={changeCurrentTasksFilter}
       />
       <TasksList
         onRemoveOne={removeOneTask}
