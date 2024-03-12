@@ -1,3 +1,5 @@
+import { findMaxId } from "./helpers";
+
 function validateTaskText(text) {
   const textType = typeof text;
   if (textType !== "string") {
@@ -29,9 +31,13 @@ export const actionTypes = {
 export default function tasksReducer(tasks, action) {
   switch (action.type) {
     case actionTypes.ADD_ONE: {
-      const { text, id } = action.payload;
+      const { text } = action.payload;
       validateTaskText(text);
-      return [{ id, text, isCompleted: false }, ...tasks];
+      return [{
+        id: findMaxId(tasks) + 1,
+        isCompleted: false,
+        text,
+      }, ...tasks];
     };
     case actionTypes.REMOVE_ONE: {
       const { id } = action.payload;

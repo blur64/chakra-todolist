@@ -10,10 +10,6 @@ import ChangeTasksFilterControl from "./components/ChangeTasksFilterControl";
 
 import tasksReducer, { actionTypes } from "./tasksReducer";
 
-function findMaxId(items) {
-  return Math.max(0, ...items.map(i => i.id));
-}
-
 export const tasksFilters = {
   ALL: 0,
   ACTIVE: 1,
@@ -23,7 +19,6 @@ export const tasksFilters = {
 function App() {
   const [tasks, dispatch] = useReducer(tasksReducer, JSON.parse(localStorage
     .getItem("chakra-todolist-tasks")) || []);
-  const [nextId, setNextId] = useState(findMaxId(tasks) + 1);
   const [currentTasksFilter, setCurrentTasksFilter] = useState(tasksFilters.ALL);
 
   const visibleTasks = tasks.filter(t => {
@@ -49,8 +44,7 @@ function App() {
   }
 
   function createTask(text) {
-    dispatch({ type: actionTypes.ADD_ONE, payload: { id: nextId, text } });
-    setNextId(nextId + 1);
+    dispatch({ type: actionTypes.ADD_ONE, payload: { text } });
   }
 
   function removeOneTask(id) {
