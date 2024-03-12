@@ -8,14 +8,9 @@ import AddTaskControl from "./components/AddTaskControl";
 import TasksList from "./components/TasksList";
 import ChangeTasksFilterControl from "./components/ChangeTasksFilterControl";
 // other
-import tasksReducer, { actionTypes } from "./tasksReducer";
+import tasksReducer from "./tasksReducer";
 import { saveTasks, getTasks } from "./api";
-
-export const tasksFilters = {
-  ALL: 0,
-  ACTIVE: 1,
-  COMPLETED: 2,
-};
+import { tasksFilters, actionTypes } from "./constants";
 
 function App() {
   const [tasks, dispatch] = useReducer(tasksReducer, getTasks());

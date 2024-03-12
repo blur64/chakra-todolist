@@ -1,4 +1,5 @@
 import { findMaxId } from "./helpers";
+import { actionTypes } from "./constants";
 
 function validateTaskText(text) {
   const textType = typeof text;
@@ -17,16 +18,6 @@ function validateTaskId(id) {
     throw new Error(`Task id must be more than 0`);
   }
 }
-
-export const actionTypes = {
-  ADD_ONE: 0,
-  REMOVE_ONE: 1,
-  TOGGLE_ONE_COMPLETENESS: 2,
-  UPDATE_ONE_TEXT: 3,
-  CLEAN_ALL: 4,
-  CLEAN_ACTIVE: 5,
-  CLEAN_COMPLETED: 6,
-};
 
 export default function tasksReducer(tasks, action) {
   switch (action.type) {
