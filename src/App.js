@@ -86,15 +86,20 @@ function App() {
       { ...t, text: newText } : t));
   }
 
-  // Maybe create a single function that accepts tasks type to remove? 
-  function cleanAllTasks() {
-    setTasks([]);
-  }
-  function cleanAllActiveTasks() {
-    setTasks(tasks.filter(t => t.isCompleted));
-  }
-  function cleanAllCompletedTasks() {
-    setTasks(tasks.filter(t => !t.isCompleted));
+  function cleanTasksByFilter(filter) {
+    switch (filter) {
+      case tasksFilters.ALL:
+        setTasks([]);
+        break;
+      case tasksFilters.ACTIVE:
+        setTasks(tasks.filter(t => t.isCompleted));
+        break;
+      case tasksFilters.COMPLETED:
+        setTasks(tasks.filter(t => !t.isCompleted));
+        break;
+      default:
+        throw new TypeError(`Unexpected filter type: ${filter}`);
+    }
   }
 
   return (
@@ -106,9 +111,9 @@ function App() {
           Remove
         </MenuButton>
         <MenuList>
-          <MenuItem onClick={cleanAllTasks}>All</MenuItem>
-          <MenuItem onClick={cleanAllActiveTasks}>Active</MenuItem>
-          <MenuItem onClick={cleanAllCompletedTasks}>Completed</MenuItem>
+          <MenuItem onClick={() => cleanTasksByFilter(tasksFilters.ALL)}>All</MenuItem>
+          <MenuItem onClick={() => cleanTasksByFilter(tasksFilters.ACTIVE)}>Active</MenuItem>
+          <MenuItem onClick={() => cleanTasksByFilter(tasksFilters.COMPLETED)}>Completed</MenuItem>
         </MenuList>
       </Menu>
       <ChangeTasksFilterControl
