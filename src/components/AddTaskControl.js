@@ -1,5 +1,5 @@
 // react
-import { useState } from "react";
+import { useCallback, useState } from "react";
 // chakra
 import { Input } from "@chakra-ui/react";
 
@@ -22,9 +22,8 @@ export default function AddTaskControl({ onTaskDataCreate }) {
     }
   }
 
-  function handleInputChange({ target: { value } }) {
-    setNewTaskText(value);
-  }
+  const handleInputChange = useCallback(({ target: { value } }) =>
+    setNewTaskText(value), []);
 
   return <Input
     onChange={handleInputChange}

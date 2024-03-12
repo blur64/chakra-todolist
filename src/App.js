@@ -1,5 +1,5 @@
 // react
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useState, useCallback } from "react";
 // chakra
 import { Box, Menu, MenuButton, MenuList, MenuItem, Button } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
@@ -39,27 +39,18 @@ function App() {
   useEffect(() => localStorage
     .setItem("chakra-todolist-tasks", JSON.stringify(tasks)), [tasks]);
 
-  function changeCurrentTasksFilter(filter) {
-    setCurrentTasksFilter(filter);
-  }
+  const changeCurrentTasksFilter = useCallback((newFilter) =>
+    setCurrentTasksFilter(newFilter), []);
 
-  function createTask(text) {
-    dispatch({ type: actionTypes.ADD_ONE, payload: { text } });
-  }
-
-  function removeOneTask(id) {
-    dispatch({ type: actionTypes.REMOVE_ONE, payload: { id } });
-  }
-
-  function toggleOneTaskCompleteness(id) {
-    dispatch({ type: actionTypes.TOGGLE_ONE_COMPLETENESS, payload: { id } });
-  }
-
-  function editOneTaskText(id, newText) {
-    dispatch({ type: actionTypes.UPDATE_ONE_TEXT, payload: { id, text: newText } });
-  }
-
-  function cleanTasksByFilter(filter) {
+  const createTask = useCallback((text) =>
+    dispatch({ type: actionTypes.ADD_ONE, payload: { text } }), []);
+  const removeOneTask = useCallback((id) =>
+    dispatch({ type: actionTypes.REMOVE_ONE, payload: { id } }), []);
+  const toggleOneTaskCompleteness = useCallback((id) =>
+    dispatch({ type: actionTypes.TOGGLE_ONE_COMPLETENESS, payload: { id } }), []);
+  const editOneTaskText = useCallback((id, newText) =>
+    dispatch({ type: actionTypes.UPDATE_ONE_TEXT, payload: { id, text: newText } }), []);
+  const cleanTasksByFilter = useCallback((filter) => {
     switch (filter) {
       case tasksFilters.ALL:
         dispatch({ type: actionTypes.CLEAN_ALL });
@@ -73,7 +64,7 @@ function App() {
       default:
         throw new TypeError(`Unexpected filter type: ${filter}`);
     }
-  }
+  }, []);
 
   return (
     <Box w="sm" mx="auto" mt={4}>

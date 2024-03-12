@@ -1,15 +1,7 @@
 // react
-import { useState } from "react";
+import { useCallback, useState } from "react";
 // chakra
 import { UnorderedList, ListItem, Button, Checkbox, Input } from "@chakra-ui/react";
-
-/*
-{
-  id: 0,
-  text: "",
-  isCompleted: false,
-}
-*/
 
 export default function TasksList({ tasks, onRemoveOne, onToggleOneCompleteness, onEditTextOne }) {
   return <UnorderedList>
@@ -35,18 +27,13 @@ function Task({ text, isCompleted, onRemove, toggleCompleteness, onTextEdit }) {
     }
   }
 
-  function handleEditingInputChange({ target: { value } }) {
-    setNewText(value);
-  }
-
-  function handleEditBtnClick() {
-    setIsEditing(true);
-  }
-
-  function handleUndoBtnClick() {
+  const handleEditBtnClick = useCallback(() => setIsEditing(true), []);
+  const handleEditingInputChange = useCallback(({ target: { value } }) =>
+    setNewText(value), []);
+  const handleUndoBtnClick = useCallback(() => {
     setIsEditing(false);
     setNewText(text);
-  }
+  }, [text]);
 
   return <ListItem>
     {isEditing ?
