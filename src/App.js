@@ -1,5 +1,5 @@
 // react
-import { useState, useEffect } from "react";
+import { useEffect, useReducer, useState } from "react";
 // chakra
 import { Box, Menu, MenuButton, MenuList, MenuItem, Button } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
@@ -8,25 +8,10 @@ import AddTaskControl from "./components/AddTaskControl";
 import TasksList from "./components/TasksList";
 import ChangeTasksFilterControl from "./components/ChangeTasksFilterControl";
 
+import tasksReducer, { actionTypes } from "./tasksReducer";
+
 function findMaxId(items) {
   return Math.max(0, ...items.map(i => i.id));
-}
-
-function validateTaskText(text) {
-  const textType = typeof text;
-  if (textType !== "string") {
-    throw new TypeError(`Unexpected type of task text: ${textType}`);
-  } else if (!text.length) {
-    throw new Error(`Empty task text is not allowed`);
-  }
-}
-function validateTaskId(id) {
-  const idType = typeof id;
-  if (idType !== "number") {
-    throw new TypeError(`Unexpected type of task id: ${idType}`);
-  } else if (id <= 0) {
-    throw new Error(`Task id must be more than 0`);
-  }
 }
 
 export const tasksFilters = {
@@ -36,7 +21,8 @@ export const tasksFilters = {
 };
 
 function App() {
-  const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem("chakra-todolist-tasks")) || []);
+  const [tasks, dispatch] = useReducer(tasksReducer, JSON.parse(localStorage
+    .getItem("chakra-todolist-tasks")) || []);
   const [nextId, setNextId] = useState(findMaxId(tasks) + 1);
   const [currentTasksFilter, setCurrentTasksFilter] = useState(tasksFilters.ALL);
 
@@ -63,39 +49,32 @@ function App() {
   }
 
   function createTask(text) {
-    validateTaskText(text);
-    setTasks([{ id: nextId, text, isCompleted: false }, ...tasks]);
+    dispatch({ type: actionTypes.ADD_ONE, payload: { id: nextId, text } });
     setNextId(nextId + 1);
   }
 
   function removeOneTask(id) {
-    validateTaskId(id);
-    setTasks(tasks.filter(t => t.id !== id));
+    dispatch({ type: actionTypes.REMOVE_ONE, payload: { id } });
   }
 
   function toggleOneTaskCompleteness(id) {
-    validateTaskId(id);
-    setTasks(tasks.map(t => t.id === id ?
-      { ...t, isCompleted: !t.isCompleted } : t));
+    dispatch({ type: actionTypes.TOGGLE_ONE_COMPLETENESS, payload: { id } });
   }
 
   function editOneTaskText(id, newText) {
-    validateTaskText(newText);
-    validateTaskId(id);
-    setTasks(tasks.map(t => t.id === id ?
-      { ...t, text: newText } : t));
+    dispatch({ type: actionTypes.UPDATE_ONE_TEXT, payload: { id, text: newText } });
   }
 
   function cleanTasksByFilter(filter) {
     switch (filter) {
       case tasksFilters.ALL:
-        setTasks([]);
+        dispatch({ type: actionTypes.CLEAN_ALL });
         break;
       case tasksFilters.ACTIVE:
-        setTasks(tasks.filter(t => t.isCompleted));
+        dispatch({ type: actionTypes.CLEAN_ACTIVE });
         break;
       case tasksFilters.COMPLETED:
-        setTasks(tasks.filter(t => !t.isCompleted));
+        dispatch({ type: actionTypes.CLEAN_COMPLETED });
         break;
       default:
         throw new TypeError(`Unexpected filter type: ${filter}`);
