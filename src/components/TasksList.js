@@ -7,7 +7,7 @@ export default function TasksList({ tasks, onRemoveOne, onToggleOneCompleteness,
   return <UnorderedList>
     {tasks.map(t => <Task
       onRemove={() => onRemoveOne(t.id)}
-      toggleCompleteness={() => onToggleOneCompleteness(t.id)}
+      onToggleCompleteness={() => onToggleOneCompleteness(t.id)}
       onTextEdit={(newText) => onEditTextOne(t.id, newText)}
       isCompleted={t.isCompleted}
       text={t.text}
@@ -16,15 +16,19 @@ export default function TasksList({ tasks, onRemoveOne, onToggleOneCompleteness,
   </UnorderedList>
 }
 
-function Task({ text, isCompleted, onRemove, toggleCompleteness, onTextEdit }) {
+function Task({ text, isCompleted, onRemove, onToggleCompleteness, onTextEdit }) {
   const [isEditing, setIsEditing] = useState(false);
   const [newText, setNewText] = useState(text);
 
   function handleKeyUpWhenEditing({ key }) {
     if (key === "Enter" && newText) {
-      onTextEdit(newText);
-      setIsEditing(false);
+      handleEditingConfirmation();
     }
+  }
+
+  function handleEditingConfirmation() {
+    onTextEdit(newText);
+    setIsEditing(false);
   }
 
   const handleEditBtnClick = useCallback(() => setIsEditing(true), []);
@@ -38,12 +42,17 @@ function Task({ text, isCompleted, onRemove, toggleCompleteness, onTextEdit }) {
   return <ListItem>
     {isEditing ?
       <Input onChange={handleEditingInputChange} onKeyUp={handleKeyUpWhenEditing} value={newText} type="text" autoFocus /> :
-      <Checkbox onChange={toggleCompleteness} isChecked={isCompleted} style={isCompleted ? { color: 'grey' } : {}}>
+      <Checkbox onChange={onToggleCompleteness} isChecked={isCompleted} style={isCompleted ? { color: 'grey' } : {}}>
         {text}
       </Checkbox>}
     {isEditing ?
-      <Button onClick={handleUndoBtnClick}>undo</Button> :
-      <Button onClick={handleEditBtnClick}>edit</Button>}
-    <Button onClick={onRemove}>x</Button>
+      <>
+        <Button onClick={handleEditingConfirmation}>ok</Button>
+        <Button onClick={handleUndoBtnClick}>undo</Button>
+      </> :
+      <>
+        <Button onClick={handleEditBtnClick}>edit</Button>
+        <Button onClick={onRemove}>x</Button>
+      </>}
   </ListItem>;
 }
