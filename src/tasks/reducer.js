@@ -1,5 +1,5 @@
-import { findMaxId } from "./helpers";
-import { actionTypes } from "./constants";
+import { findMaxId } from "../helpers";
+import { actionTypes } from "../constants";
 
 function validateTaskText(text) {
   const textType = typeof text;

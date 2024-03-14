@@ -8,7 +8,7 @@ import AddTaskControl from "./components/AddTaskControl";
 import TasksList from "./components/TasksList";
 import ChangeTasksFilterControl from "./components/ChangeTasksFilterControl";
 // other
-import tasksReducer from "./tasksReducer";
+import tasksReducer from "./tasks/reducer";
 import { saveTasks, getTasks } from "./api";
 import { tasksFilters, actionTypes } from "./constants";
 
