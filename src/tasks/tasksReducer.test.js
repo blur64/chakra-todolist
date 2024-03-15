@@ -22,10 +22,10 @@ describe("Tasks reducer", () => {
     should have correct types.
     * Check that task properties have expected values
     */
-
+    const expectedAddedTask = { id: 3, text: "fourth task text", isCompleted: false };
     const newTasks = tasksReducer(tasks, {
       type: actionTypes.ADD_ONE,
-      payload: { text: "fourth task text" },
+      payload: { text: expectedAddedTask.text },
     });
 
     // should add only one item
@@ -43,16 +43,15 @@ describe("Tasks reducer", () => {
     expect(idOfLastItemInTasks === idOfLastItemInNewTasks).toBe(true);
 
     // item must be a task
-    const item = newTasks[0];
-    const id = item.id;
-    const text = item.text;
-    const isCompleted = item.isCompleted;
+    const { id, text, isCompleted } = newTasks[0];
     expect(typeof id === "number" &&
       typeof text === "string" &&
       typeof isCompleted === "boolean").toBe(true);
 
     // every task's prop must has expected value
-    expect(id === 3 && text === "fourth task text" && isCompleted === false)
+    expect(id === expectedAddedTask.id && text ===
+      expectedAddedTask.text && isCompleted ===
+      expectedAddedTask.isCompleted)
       .toBe(true);
   });
 
@@ -63,20 +62,20 @@ describe("Tasks reducer", () => {
     * Prove that position of every item, which was before removed item, 
     wasn't changed, and position of leftover items was decreased by 1
     */
-
+    const targetTaskId = 1;
     const newTasks = tasksReducer(tasks, {
       type: actionTypes.REMOVE_ONE,
-      payload: { id: 1 },
+      payload: { id: targetTaskId },
     });
 
     // should remove only one item
     expect(tasks.length - newTasks.length).toBe(1);
 
     // deleted needed task
-    expect(newTasks.find(t => t.id === 1)).toBe(undefined);
+    expect(newTasks.find(t => t.id === targetTaskId)).toBe(undefined);
 
     // should correctly change indexes of other items
-    const deletedIndex = tasks.findIndex(t => t.id === 1);
+    const deletedIndex = tasks.findIndex(t => t.id === targetTaskId);
     const oldIndexesMap = tasks.map((t, idx) => ([t.id, idx]));
     const newIndexesMap = newTasks.map((t, idx) => ([t.id, idx]));
 
@@ -96,19 +95,19 @@ describe("Tasks reducer", () => {
     * Prove that task completeness prop was toggled
     * Prove that completeness prop of other tasks wasn't changed 
     */
-
+    const targetTaskId = 2;
     const newTasks = tasksReducer(tasks, {
       type: actionTypes.TOGGLE_ONE_COMPLETENESS,
-      payload: { id: 2 },
+      payload: { id: targetTaskId },
     });
 
     // should toggle completeness of needed task
-    expect(newTasks.find(t => t.id === 2).isCompleted ===
-      !tasks.find(t => t.id === 2).isCompleted).toBe(true);
+    expect(newTasks.find(t => t.id === targetTaskId).isCompleted ===
+      !tasks.find(t => t.id === targetTaskId).isCompleted).toBe(true);
 
     // shouldn't change completeness of other tasks
     expect(tasks.every((t, idx) => {
-      if (t.id !== 2) {
+      if (t.id !== targetTaskId) {
         return newTasks[idx].isCompleted === t.isCompleted
       }
       return true;
@@ -120,18 +119,20 @@ describe("Tasks reducer", () => {
     * Prove that task text prop was changed
     * Prove that text prop of other tasks wasn't changed
     */
-
+    const expectedUpdatedTaskText = "super text";
+    const targetTaskId = 2;
     const newTasks = tasksReducer(tasks, {
       type: actionTypes.UPDATE_ONE_TEXT,
-      payload: { text: "super text", id: 2 },
+      payload: { text: expectedUpdatedTaskText, id: targetTaskId },
     });
 
     // should update text of needed task
-    expect(newTasks.find(t => t.id === 2).text === "super text").toBe(true);
+    expect(newTasks.find(t => t.id === targetTaskId)
+      .text === expectedUpdatedTaskText).toBe(true);
 
     // shouldn't change text of other tasks
     expect(tasks.every((t, idx) => {
-      if (t.id !== 2) {
+      if (t.id !== targetTaskId) {
         return newTasks[idx].text === t.text;
       }
       return true;
@@ -142,7 +143,6 @@ describe("Tasks reducer", () => {
     /* 
     * Prove that tasks array is empty
     */
-
     const newTasks = tasksReducer(tasks, { type: actionTypes.CLEAN_ALL });
 
     // should return empty array
@@ -154,7 +154,6 @@ describe("Tasks reducer", () => {
     * Prove that all uncompleted tasks are in array
     * Prove that array length equals count of all uncompleted tasks before
     */
-
     const newTasks = tasksReducer(tasks, { type: actionTypes.CLEAN_COMPLETED });
 
     // should return array only with uncompleted tasks
@@ -170,7 +169,6 @@ describe("Tasks reducer", () => {
     * Prove that all completed tasks are in array
     * Prove that array length equals count of all completed tasks before
     */
-
     const newTasks = tasksReducer(tasks, { type: actionTypes.CLEAN_ACTIVE });
 
     // should return array only with completed tasks
