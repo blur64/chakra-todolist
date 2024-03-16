@@ -1,7 +1,8 @@
 // react
 import { useCallback, useState, memo } from "react";
 // chakra
-import { Input } from "@chakra-ui/react";
+import { Input, InputGroup, InputRightElement, IconButton } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
 
 export default memo(function AddTaskControl({ onTaskDataCreate }) {
   const [newTaskText, setNewTaskText] = useState("");
@@ -14,8 +15,6 @@ export default memo(function AddTaskControl({ onTaskDataCreate }) {
     setNewTaskText("");
   }
 
-  // There is similar logic in Task component in TaskList.js, maybe put it in
-  // separate component? 
   function handleKeyUp({ key }) {
     if (key === "Enter" && newTaskText) {
       createTaskData();
@@ -25,10 +24,16 @@ export default memo(function AddTaskControl({ onTaskDataCreate }) {
   const handleInputChange = useCallback(({ target: { value } }) =>
     setNewTaskText(value), []);
 
-  return <Input
-    onChange={handleInputChange}
-    onKeyUp={handleKeyUp}
-    value={newTaskText}
-    type="text"
-  />;
+  return <InputGroup>
+    <Input
+      onChange={handleInputChange}
+      onKeyUp={handleKeyUp}
+      value={newTaskText}
+      type="text"
+      placeholder="To do..."
+    />
+    <InputRightElement>
+      <IconButton variant="ghost" _hover={{ backgroundColor: "gray.600" }} isRound={true} icon={<AddIcon color="gray.300" />} />
+    </InputRightElement>
+  </InputGroup>;
 });

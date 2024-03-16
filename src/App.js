@@ -1,7 +1,7 @@
 // react
 import { useEffect, useReducer, useState, useCallback, useMemo } from "react";
 // chakra
-import { Box, Menu, MenuButton, MenuList, MenuItem, Button } from "@chakra-ui/react";
+import { Box, Menu, MenuButton, MenuList, MenuItem, Button, Container, Flex, Spacer, CircularProgress, CircularProgressLabel, Text } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 // components
 import AddTaskControl from "./components/AddTaskControl";
@@ -60,19 +60,25 @@ function App() {
   }, []);
 
   return (
-    <Box w="sm" mx="auto" mt={4}>
+    <Container maxW='container.sm' py={4}>
       <AddTaskControl onTaskDataCreate={createTask} />
-      <p>Completeness: {completenessPercentage}%</p>
-      <Menu>
-        <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-          Remove
-        </MenuButton>
-        <MenuList>
-          <MenuItem onClick={() => cleanTasksByFilter(tasksFilters.ALL)}>All</MenuItem>
-          <MenuItem onClick={() => cleanTasksByFilter(tasksFilters.ACTIVE)}>Active</MenuItem>
-          <MenuItem onClick={() => cleanTasksByFilter(tasksFilters.COMPLETED)}>Completed</MenuItem>
-        </MenuList>
-      </Menu>
+      <Flex align="center" mt={6}>
+        <Menu>
+          <MenuButton _active={{ backgroundColor: "gray.700" }} variant="outline" borderRadius="100px" color="#EDF2F7" border="2px solid" borderColor="gray.700" as={Button} _hover={{ backgroundColor: "gray.700" }} rightIcon={<ChevronDownIcon />}>
+            Remove
+          </MenuButton>
+          <MenuList backgroundColor="gray.700" border="none" >
+            <MenuItem _hover={{ backgroundColor: "gray.600" }} backgroundColor="gray.700" onClick={() => cleanTasksByFilter(tasksFilters.ALL)}>All</MenuItem>
+            <MenuItem _hover={{ backgroundColor: "gray.600" }} backgroundColor="gray.700" onClick={() => cleanTasksByFilter(tasksFilters.ACTIVE)}>Active</MenuItem>
+            <MenuItem _hover={{ backgroundColor: "gray.600" }} backgroundColor="gray.700" onClick={() => cleanTasksByFilter(tasksFilters.COMPLETED)}>Completed</MenuItem>
+          </MenuList>
+        </Menu>
+        <Spacer />
+        <Text>Сompleteness:</Text>
+        <CircularProgress value={completenessPercentage} ml={2} size='64px' color='green.400' trackColor="gray.600">
+          <CircularProgressLabel>{completenessPercentage}%</CircularProgressLabel>
+        </CircularProgress>
+      </Flex>
       <ChangeTasksFilterControl
         currentFilter={currentTasksFilter}
         onChange={changeCurrentTasksFilter}
@@ -83,7 +89,7 @@ function App() {
         onEditTextOne={editOneTaskText}
         tasks={visibleTasks}
       />
-    </Box>
+    </Container>
   );
 }
 
