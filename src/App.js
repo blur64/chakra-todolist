@@ -1,12 +1,12 @@
 // react
 import { useEffect, useReducer, useState, useCallback, useMemo } from "react";
 // chakra
-import { Menu, MenuButton, MenuList, MenuItem, Button, Container, Flex, Spacer, CircularProgress, CircularProgressLabel, Text } from "@chakra-ui/react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { Container, Flex, Spacer, CircularProgress, CircularProgressLabel, Text } from "@chakra-ui/react";
 // components
 import AddTaskControl from "./components/AddTaskControl";
 import TasksList from "./components/TasksList";
 import ChangeTasksFilterControl from "./components/ChangeTasksFilterControl";
+import CleanTasksControl from "./components/CleanTasksControl";
 // other
 import tasksReducer from "./tasks/reducer";
 import { saveTasks, getTasks } from "./api";
@@ -63,16 +63,7 @@ function App() {
     <Container maxW='container.sm' py={4}>
       <AddTaskControl onTaskDataCreate={createTask} />
       <Flex align="center" mt={6}>
-        <Menu>
-          <MenuButton rightIcon={<ChevronDownIcon />} as={Button} variant="outline">
-            Remove
-          </MenuButton>
-          <MenuList >
-            <MenuItem onClick={() => cleanTasksByFilter(tasksFilters.ALL)}>All</MenuItem>
-            <MenuItem onClick={() => cleanTasksByFilter(tasksFilters.ACTIVE)}>Active</MenuItem>
-            <MenuItem onClick={() => cleanTasksByFilter(tasksFilters.COMPLETED)}>Completed</MenuItem>
-          </MenuList>
-        </Menu>
+        <CleanTasksControl onCleanByFilter={cleanTasksByFilter} />
         <Spacer />
         <Text>Сompleteness:</Text>
         <CircularProgress
