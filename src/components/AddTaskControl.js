@@ -33,7 +33,11 @@ export default memo(function AddTaskControl({ onTaskDataCreate }) {
       placeholder="To do..."
     />
     <InputRightElement>
-      <IconButton variant="ghost" _hover={{ backgroundColor: "gray.600" }} isRound={true} icon={<AddIcon color="gray.300" />} />
+      <IconButton
+        icon={<AddIcon variant="appBaseIcon" />}
+        _hover={{ backgroundColor: "gray.600" }}
+        variant="ghost"
+      />
     </InputRightElement>
   </InputGroup>;
 });

@@ -40,20 +40,57 @@ function Task({ text, isCompleted, onRemove, onToggleCompleteness, onTextEdit })
     setNewText(text);
   }, [text]);
 
-  return <ListItem pl={isEditing ? 4 : 0} py={isEditing ? 4 : 0} display="flex" gap={2} pr={2} borderRadius="8px" alignItems="center" _hover={{ backgroundColor: "blackAlpha.300" }}>
+  return <ListItem
+    pl={isEditing ? 4 : 0} py={isEditing ? 4 : 0} pr={2} gap={2}
+    display="flex" alignItems="center" borderRadius="8px"
+    _hover={{ backgroundColor: "blackAlpha.300" }}
+  >
     {isEditing ?
-      <Input py={4} onChange={handleEditingInputChange} onKeyUp={handleKeyUpWhenEditing} value={newText} type="text" autoFocus /> :
-      <Checkbox pl={4} py={4} onChange={onToggleCompleteness} isChecked={isCompleted} style={isCompleted ? { color: "#718096" } : {}} flex={1} variant="circular" colorScheme="green">
-        <Text as={isCompleted ? "del" : ""}>{text}</Text>
+      <Input
+        onChange={handleEditingInputChange}
+        onKeyUp={handleKeyUpWhenEditing}
+        value={newText}
+        type="text"
+        autoFocus
+      /> :
+      <Checkbox
+        onChange={onToggleCompleteness}
+        isChecked={isCompleted}
+        pl={4} py={4} flex={1}
+        variant="circular"
+        colorScheme="green"
+      >
+        <Text
+          as={isCompleted ? "del" : ""}
+          color={isCompleted ? "gray.500" : ""}
+        >
+          {text}
+        </Text>
       </Checkbox>}
     {isEditing ?
       <>
-        <IconButton variant="ghost" _hover={{ backgroundColor: "gray.700" }} isRound={true} onClick={handleEditingConfirmation} icon={<CheckIcon color="gray.400" />} />
-        <IconButton variant="ghost" _hover={{ backgroundColor: "gray.700" }} isRound={true} onClick={handleUndoBtnClick} icon={<CloseIcon color="gray.400" />} />
+        <IconButton
+          onClick={handleEditingConfirmation}
+          icon={<CheckIcon variant="appBaseIcon" />}
+          variant="ghost"
+        />
+        <IconButton
+          onClick={handleUndoBtnClick}
+          icon={<CloseIcon variant="appBaseIcon" />}
+          variant="ghost"
+        />
       </> :
       <>
-        <IconButton variant="ghost" _hover={{ backgroundColor: "gray.700" }} isRound={true} onClick={handleEditBtnClick} icon={<EditIcon color="gray.400" />} />
-        <IconButton variant="ghost" _hover={{ backgroundColor: "gray.700" }} isRound={true} onClick={onRemove} icon={<DeleteIcon color="gray.400" />} />
+        <IconButton
+          onClick={handleEditBtnClick}
+          icon={<EditIcon variant="appBaseIcon" />}
+          variant="ghost"
+        />
+        <IconButton
+          onClick={onRemove}
+          icon={<DeleteIcon variant="appBaseIcon" />}
+          variant="ghost"
+        />
       </>}
   </ListItem>;
 }
