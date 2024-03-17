@@ -10,6 +10,7 @@ import CleanTasksControl from "./components/CleanTasksControl";
 import ProgressPanel from "./components/ProgressPanel";
 // other
 import tasksReducer from "./tasks/reducer";
+import { calcCompletenessPercentage } from "./tasks/relatedLogic";
 import { saveTasks, getTasks } from "./api";
 import { tasksFilters, actionTypes } from "./constants";
 
@@ -29,9 +30,8 @@ function App() {
     return t;
   });
 
-  const completenessPercentage = useMemo(() => tasks.length ?
-    Math.round(tasks.filter(t => t.isCompleted).length / tasks.length * 100) :
-    0, [tasks]);
+  const completenessPercentage = useMemo(() =>
+    calcCompletenessPercentage(tasks), [tasks]);
 
   const changeCurrentTasksFilter = useCallback((newFilter) =>
     setCurrentTasksFilter(newFilter), []);
