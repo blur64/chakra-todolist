@@ -1,12 +1,13 @@
 // react
 import { useEffect, useReducer, useState, useCallback, useMemo } from "react";
 // chakra
-import { Container, Flex, Spacer, CircularProgress, CircularProgressLabel, Text } from "@chakra-ui/react";
+import { Container, Flex, Spacer } from "@chakra-ui/react";
 // components
 import AddTaskControl from "./components/AddTaskControl";
 import TasksList from "./components/TasksList";
 import ChangeTasksFilterControl from "./components/ChangeTasksFilterControl";
 import CleanTasksControl from "./components/CleanTasksControl";
+import ProgressPanel from "./components/ProgressPanel";
 // other
 import tasksReducer from "./tasks/reducer";
 import { saveTasks, getTasks } from "./api";
@@ -65,14 +66,7 @@ function App() {
       <Flex align="center" mt={6}>
         <CleanTasksControl onCleanByFilter={cleanTasksByFilter} />
         <Spacer />
-        <Text>Сompleteness:</Text>
-        <CircularProgress
-          value={completenessPercentage}
-          color="green.400" trackColor="gray.600"
-          ml={2} size="64px"
-        >
-          <CircularProgressLabel>{completenessPercentage}%</CircularProgressLabel>
-        </CircularProgress>
+        <ProgressPanel completenessPercentage={completenessPercentage} />
       </Flex>
       <ChangeTasksFilterControl
         currentFilter={currentTasksFilter}
