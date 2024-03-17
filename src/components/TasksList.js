@@ -27,6 +27,12 @@ function Task({ text, isCompleted, onRemove, onToggleCompleteness, onTextEdit })
     }
   }
 
+  function handleConfirmBtnClick() {
+    if (newText) {
+      handleEditingConfirmation();
+    }
+  }
+
   function handleEditingConfirmation() {
     onTextEdit(newText);
     setIsEditing(false);
@@ -70,7 +76,7 @@ function Task({ text, isCompleted, onRemove, onToggleCompleteness, onTextEdit })
     {isEditing ?
       <>
         <IconButton
-          onClick={handleEditingConfirmation}
+          onClick={handleConfirmBtnClick}
           icon={<CheckIcon variant="appBaseIcon" />}
           variant="ghost"
         />
